@@ -7,7 +7,8 @@ import java.util.Scanner;
 public class TemperatureConverter {
 
     private static final int HISTORY_LIMIT = 100;
-    private static final double KELVIN_OFFSET = 273.15;
+    private static final double ABSOLUTE_ZERO_C = -273.15;
+    private static final double ABSOLUTE_ZERO_F = -459.67;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -31,7 +32,6 @@ public class TemperatureConverter {
             }
 
             int choice = scanner.nextInt();
-
             if (choice == 0) {
                 System.out.println("Exiting the application. Goodbye!");
                 break;
@@ -41,33 +41,49 @@ public class TemperatureConverter {
                 case 1:
                     System.out.print("Enter Celsius: ");
                     double c1 = scanner.nextDouble();
-                    double f1 = (c1 * 9 / 5) + 32;
-                    saveToHistory(history, String.format("%.2f °C = %.2f °F", c1, f1));
-                    System.out.printf("Result: %.2f °F%n", f1);
+                    if (c1 < ABSOLUTE_ZERO_C) {
+                        System.out.println("Error: Temperature below absolute zero!");
+                    } else {
+                        double f1 = (c1 * 9 / 5) + 32;
+                        saveToHistory(history, String.format("%.2f °C = %.2f °F", c1, f1));
+                        System.out.printf("Result: %.2f °F%n", f1);
+                    }
                     break;
 
                 case 2:
                     System.out.print("Enter Fahrenheit: ");
                     double f2 = scanner.nextDouble();
-                    double c2 = (f2 - 32) * 5 / 9;
-                    saveToHistory(history, String.format("%.2f °F = %.2f °C", f2, c2));
-                    System.out.printf("Result: %.2f °C%n", c2);
+                    if (f2 < ABSOLUTE_ZERO_F) {
+                        System.out.println("Error: Temperature below absolute zero!");
+                    } else {
+                        double c2 = (f2 - 32) * 5 / 9;
+                        saveToHistory(history, String.format("%.2f °F = %.2f °C", f2, c2));
+                        System.out.printf("Result: %.2f °C%n", c2);
+                    }
                     break;
 
                 case 3:
                     System.out.print("Enter Celsius: ");
                     double c3 = scanner.nextDouble();
-                    double k3 = c3 + KELVIN_OFFSET;
-                    saveToHistory(history, String.format("%.2f °C = %.2f K", c3, k3));
-                    System.out.printf("Result: %.2f K%n", k3);
+                    if (c3 < ABSOLUTE_ZERO_C) {
+                        System.out.println("Error: Temperature below absolute zero!");
+                    } else {
+                        double k3 = c3 - ABSOLUTE_ZERO_C;
+                        saveToHistory(history, String.format("%.2f °C = %.2f K", c3, k3));
+                        System.out.printf("Result: %.2f K%n", k3);
+                    }
                     break;
 
                 case 4:
                     System.out.print("Enter Kelvin: ");
                     double k4 = scanner.nextDouble();
-                    double c4 = k4 - KELVIN_OFFSET;
-                    saveToHistory(history, String.format("%.2f K = %.2f °C", k4, c4));
-                    System.out.printf("Result: %.2f °C%n", c4);
+                    if (k4 < 0) {
+                        System.out.println("Error: Kelvin cannot be negative!");
+                    } else {
+                        double c4 = k4 + ABSOLUTE_ZERO_C;
+                        saveToHistory(history, String.format("%.2f K = %.2f °C", k4, c4));
+                        System.out.printf("Result: %.2f °C%n", c4);
+                    }
                     break;
 
                 case 5:
